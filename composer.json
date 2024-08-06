@@ -20,5 +20,7 @@
             "name": "alanvdb",
             "email": "alanvdb.coder@gmail.com"
         }
-    ]
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

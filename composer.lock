@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ceb835944eb07dbb6dba9d9cd5bc776e",
+    "content-hash": "12d5be295df958be9a7d167a87bc401c",
     "packages": [
         {
             "name": "alanvdb/dependency-container",
@@ -1903,7 +1903,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
