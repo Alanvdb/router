@@ -1,0 +1,24 @@
+{
+    "name": "alanvdb/router",
+    "description": "A basic PHP application router",
+    "type": "library",
+    "require": {
+        "psr/http-server-middleware": "^1.0",
+        "alanvdb/dependency-container": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "AlanVdb\\Router\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "alanvdb",
+            "email": "alanvdb.coder@gmail.com"
+        }
+    ]
+}
