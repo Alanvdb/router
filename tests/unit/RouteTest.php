@@ -25,6 +25,7 @@ final class RouteTest extends TestCase
     public static function validRouteProvider(): array
     {
         return [
+            ['root', 'GET', '/', fn() => 'Root'],
             ['home', 'GET', '/home', fn() => 'Home'],
             ['post_show', 'GET|POST', '/post/{id}', fn() => 'Post Show'],
         ];

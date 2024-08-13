@@ -41,7 +41,7 @@ class Route implements RouteInterface
             }
         }
 
-        if (!preg_match('/^\/[a-zA-Z0-9\/{}]+$/', $path)) {
+        if (!preg_match('/^\/[a-zA-Z0-9\/{}]*$/', $path)) {
             throw new InvalidRouteParamProvided("Route path must be a valid regex pattern with variables, e.g., /post/{slug}.");
         }
 
