@@ -38,7 +38,7 @@ class UriGenerator implements UriGeneratorInterface
     public function generateUri(string $name, array $vars = []): string
     {
         if (!$this->routeCollection->has($name)) {
-            throw new RouteNameNotFound("Provided route name not found in Route collection.");
+            throw new RouteNameNotFound("Provided route name not found in Route collection : '$name'.");
         }
         
         $uri = $this->routeCollection->get($name)->getPath();
