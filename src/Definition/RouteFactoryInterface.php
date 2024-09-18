@@ -7,5 +7,5 @@ interface RouteFactoryInterface
     /**
      * Creates a route instance.
      */
-    public function createRoute(string $name, string $methods, string $path, callable $target): RouteInterface;
+    public function createRoute(string $name, string $methods, string $path, mixed $target): RouteInterface;
 }

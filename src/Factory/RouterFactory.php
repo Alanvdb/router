@@ -31,10 +31,10 @@ class RouterFactory
      * 
      * @param string $methods like "GET" or "GET|POST"
      * @param string $path
-     * @param callable $target
+     * @param mixed $target
      * @return RouteInterface
      */
-    public function createRoute(string $name, string $methods, string $path, callable $target): RouteInterface
+    public function createRoute(string $name, string $methods, string $path, mixed $target): RouteInterface
     {
         return new Route($name, $methods, $path, $target);
     }
