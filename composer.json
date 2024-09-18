@@ -18,7 +18,6 @@
         }
     ],
     "require": {
-        "alanvdb/dependency-container": "^0.1.0",
         "psr/http-message": "^2.0"
     }
 }

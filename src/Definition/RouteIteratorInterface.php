@@ -6,17 +6,12 @@ use Iterator;
 
 interface RouteIteratorInterface extends Iterator
 {
-    /**
-     * Return the current element.
-     *
-     * @return RouteInterface
-     */
+    /* @throws RouteNameNotFound */
+    public function get(string $routeName) : RouteInterface;
+
+    public function has(string $name) : bool;
+
     public function current(): RouteInterface;
 
-    /**
-     * Return the key of the current element.
-     *
-     * @return string
-     */
     public function key(): string;
 }

@@ -4,25 +4,24 @@ namespace AlanVdb\Router;
 
 use AlanVdb\Router\Definition\UriGeneratorInterface;
 use AlanVdb\Router\Definition\RouteIteratorInterface;
-use Psr\Container\ContainerInterface;
 
 use AlanVdb\Router\Exception\RouteNameNotFound;
 
 class UriGenerator implements UriGeneratorInterface
 {
     /**
-     * @var RouteIteratorInterface&ContainerInterface $routes
+     * @var RouteIteratorInterface $routes
      */
-    protected RouteIteratorInterface&ContainerInterface $routeCollection;
+    protected RouteIteratorInterface $routes;
 
     /**
      * UriGenerator constructor.
      *
-     * @param RouteIteratorInterface&ContainerInterface $routes
+     * @param RouteIteratorInterface $routes
      */
-    public function __construct(RouteIteratorInterface & ContainerInterface $routeCollection)
+    public function __construct(RouteIteratorInterface $routes)
     {
-        $this->routeCollection = $routeCollection;
+        $this->routes = $routes;
     }
 
     /**
@@ -37,11 +36,11 @@ class UriGenerator implements UriGeneratorInterface
      */
     public function generateUri(string $name, array $vars = []): string
     {
-        if (!$this->routeCollection->has($name)) {
+        if (!$this->routes->has($name)) {
             throw new RouteNameNotFound("Provided route name not found in Route collection : '$name'.");
         }
         
-        $uri = $this->routeCollection->get($name)->getPath();
+        $uri = $this->routes->get($name)->getPath();
 
         foreach ($vars as $varName => $value) {
             $pattern = sprintf('/\{%s\s*\}/', preg_quote($varName, '/'));

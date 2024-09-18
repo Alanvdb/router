@@ -13,29 +13,20 @@ use AlanVdb\Router\Exception\MethodNotAllowed;
 
 class RequestMatcher implements RequestMatcherInterface
 {
-    /**
-     * @var RouteIteratorInterface $routeCollection
-     */
-    private $routeCollection;
+    protected RouteIteratorInterface $routes;
 
-    /**
-     * @param RouteIteratorInterface $routeCollection
-     */
-    public function __construct(RouteIteratorInterface $routeCollection)
+    public function __construct(RouteIteratorInterface $routes)
     {
-        $this->routeCollection = $routeCollection;
+        $this->routes = $routes;
     }
 
-    /**
-     * 
-     */
     public function matchRequest(ServerRequestInterface $request) : RouteInterface
     {
         $path             = $request->getUri()->getPath();
         $method           = $request->getMethod();
         $methodNotAllowed = false;
 
-        foreach ($this->routeCollection as $route) {
+        foreach ($this->routes as $route) {
 
             if ($this->isPathMatch($route, $path)) {    
 
@@ -52,13 +43,6 @@ class RequestMatcher implements RequestMatcherInterface
             : new RouteNotFound("No route found for the current request.", 404);
     }
 
-    /**
-     * Determines if the given route path matches the current request path.
-     *
-     * @param RouteInterface $route
-     * @param string $path
-     * @return bool
-     */
     protected function isPathMatch(RouteInterface $route, string $path): bool
     {
         $pattern = $this->convertPathToRegex($route->getPath());
@@ -71,13 +55,6 @@ class RequestMatcher implements RequestMatcherInterface
         return false;
     }
 
-    /**
-     * Determines if the given route method matches the current request method.
-     *
-     * @param RouteInterface $route
-     * @param string $method
-     * @return bool
-     */
     protected function isMethodMatch(RouteInterface $route, string $method): bool
     {
         return in_array($method, $route->getMethods());

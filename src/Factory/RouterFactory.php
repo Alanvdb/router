@@ -3,26 +3,24 @@
 namespace AlanVdb\Router\Factory;
 
 use AlanVdb\Router\Definition\RouteFactoryInterface;
-use AlanVdb\Router\Definition\RouteCollectionFactoryInterface;
+use AlanVdb\Router\Definition\RouteIteratorFactoryInterface;
 use AlanVdb\Router\Definition\RequestMatcherFactoryInterface;
 use AlanVdb\Router\Definition\UriGeneratorFactoryInterface;
 
 use AlanVdb\Router\Definition\RouteInterface;
 use AlanVdb\Router\Definition\RouteIteratorInterface;
-use Psr\Container\ContainerInterface;
-use AlanVdb\Dependency\Definition\LazyContainerInterface;
 use AlanVdb\Router\Definition\UriGeneratorInterface;
 use AlanVdb\Router\Definition\RequestMatcherInterface;
 
 use AlanVdb\Router\Route;
-use AlanVdb\Router\RouteCollection;
+use AlanVdb\Router\RouteIterator;
 use AlanVdb\Router\RequestMatcher;
 use AlanVdb\Router\UriGenerator;
 
 class RouterFactory
     implements
         RouteFactoryInterface,
-        RouteCollectionFactoryInterface,
+        RouteIteratorFactoryInterface,
         RequestMatcherFactoryInterface,
         UriGeneratorFactoryInterface
 {
@@ -40,28 +38,28 @@ class RouterFactory
     }
 
     /**
-     * Creates a collection of routes.
+     * Creates a Iterator of routes.
      *
      * @return RouteIteratorInterface
      */
-    public function createRouteCollection(): RouteIteratorInterface & LazyContainerInterface
+    public function createRouteIterator(RouteInterface ...$routes): RouteIteratorInterface
     {
-        return new RouteCollection();
+        return new RouteIterator($routes);
     }
 
     /**
      * 
      */
-    public function createRequestMatcher(RouteIteratorInterface & ContainerInterface $routeCollection): RequestMatcherInterface
+    public function createRequestMatcher(RouteIteratorInterface $routes): RequestMatcherInterface
     {
-        return new RequestMatcher($routeCollection);
+        return new RequestMatcher($routes);
     }
 
     /**
      * 
      */
-    public function createUriGenerator(RouteIteratorInterface & LazyContainerInterface $routeCollection): UriGeneratorInterface
+    public function createUriGenerator(RouteIteratorInterface $routes): UriGeneratorInterface
     {
-        return new UriGenerator($routeCollection);
+        return new UriGenerator($routes);
     }
 }
