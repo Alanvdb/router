@@ -19,7 +19,7 @@ class Route implements RouteInterface
     private array $params = [];
 
     /**
-     * @var callable $target
+     * @var mixed $target
      */
     private $target;
 
@@ -29,7 +29,7 @@ class Route implements RouteInterface
      * @param string   $name    The name of the route.
      * @param string   $methods The HTTP methods allowed for the route, separated by '|'.
      * @param string   $path    The path of the route, which may contain parameters.
-     * @param callable $target  The target action to execute when the route is matched.
+     * @param mixed $target  The target action to execute when the route is matched.
      *
      * @throws InvalidRouteParamProvided If any of the parameters are invalid.
      */
