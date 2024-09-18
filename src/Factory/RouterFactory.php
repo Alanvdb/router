@@ -44,7 +44,7 @@ class RouterFactory
      */
     public function createRouteIterator(RouteInterface ...$routes): RouteIteratorInterface
     {
-        return new RouteIterator($routes);
+        return new RouteIterator(...$routes);
     }
 
     /**
