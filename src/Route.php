@@ -33,11 +33,11 @@ class Route implements RouteInterface
      *
      * @throws InvalidRouteParamProvided If any of the parameters are invalid.
      */
-    public function __construct(string $name, string $methods, string $path, callable $target)
+    public function __construct(string $name, string $methods, string $path, mixed $target)
     {
         foreach (['name', 'path', 'methods'] as $varName) {
             if (empty($$varName)) {
-                throw new InvalidRouteParamProvided(ucfirst($varName) . " name cannot be empty");
+                throw new InvalidRouteParamProvided("${$varName} argument cannot be empty.");
             }
         }
 
