@@ -6,23 +6,27 @@ use AlanVdb\Router\Definition\RouteFactoryInterface;
 use AlanVdb\Router\Definition\RouteIteratorFactoryInterface;
 use AlanVdb\Router\Definition\RequestMatcherFactoryInterface;
 use AlanVdb\Router\Definition\UriGeneratorFactoryInterface;
+use AlanVdb\Router\Definition\RouterMiddlewareFactoryInterface;
 
 use AlanVdb\Router\Definition\RouteInterface;
 use AlanVdb\Router\Definition\RouteIteratorInterface;
-use AlanVdb\Router\Definition\UriGeneratorInterface;
 use AlanVdb\Router\Definition\RequestMatcherInterface;
+use AlanVdb\Router\Definition\UriGeneratorInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 use AlanVdb\Router\Route;
 use AlanVdb\Router\RouteIterator;
 use AlanVdb\Router\RequestMatcher;
 use AlanVdb\Router\UriGenerator;
+use AlanVdb\Router\Middleware\RouterMiddleware;
 
 class RouterFactory
     implements
         RouteFactoryInterface,
         RouteIteratorFactoryInterface,
         RequestMatcherFactoryInterface,
-        UriGeneratorFactoryInterface
+        UriGeneratorFactoryInterface,
+        RouterMiddlewareFactoryInterface
 {
     /**
      * Creates a route instance.
@@ -61,5 +65,10 @@ class RouterFactory
     public function createUriGenerator(RouteIteratorInterface $routes): UriGeneratorInterface
     {
         return new UriGenerator($routes);
+    }
+
+    public function createRouterMiddleware(array $routeParams) : MiddlewareInterface
+    {
+        return new RouterMiddleware($routeParams, $this);
     }
 }
