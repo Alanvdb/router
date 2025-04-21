@@ -2,10 +2,10 @@
 
 namespace AlanVdb\Router\Exception;
 
+use InvalidArgumentException;
 use AlanVdb\Router\Definition\RouterExceptionInterface;
-use RuntimeException;
 
-class RouteNotFound
-    extends RuntimeException
+class InvalidRouterParamProvided
+    extends InvalidArgumentException
     implements RouterExceptionInterface
 {}

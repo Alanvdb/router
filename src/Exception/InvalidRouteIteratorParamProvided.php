@@ -3,9 +3,9 @@
 namespace AlanVdb\Router\Exception;
 
 use AlanVdb\Router\Definition\RouterExceptionInterface;
-use RuntimeException;
+use InvalidArgumentException;
 
-class RouteNotFound
-    extends RuntimeException
+class InvalidRouteIteratorParamProvided
+    extends InvalidArgumentException
     implements RouterExceptionInterface
 {}

@@ -30,8 +30,10 @@ class RequestMatcher implements RequestMatcherInterface
 
             if ($this->isPathMatch($route, $path)) {    
 
+                $matchedRoute = $route;
+
                 if ($this->isMethodMatch($route, $method)) {
-                    return $route;
+                    return $matchedRoute;
                 } else {
                     $methodNotAllowed = true;
                 }
@@ -39,7 +41,7 @@ class RequestMatcher implements RequestMatcherInterface
         }
 
         throw $methodNotAllowed
-            ? new MethodNotAllowed("Method not allowed for the requested route.", 405)
+            ? new MethodNotAllowed($matchedRoute->getMethods(), "Method not allowed for the current request.", 405)
             : new RouteNotFound("No route found for the current request.", 404);
     }
 

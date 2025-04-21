@@ -2,73 +2,14 @@
 
 namespace AlanVdb\Router\Factory;
 
-use AlanVdb\Router\Definition\RouteFactoryInterface;
-use AlanVdb\Router\Definition\RouteIteratorFactoryInterface;
-use AlanVdb\Router\Definition\RequestMatcherFactoryInterface;
-use AlanVdb\Router\Definition\UriGeneratorFactoryInterface;
-use AlanVdb\Router\Definition\RouterMiddlewareFactoryInterface;
+use AlanVdb\Router\Definition\RouterFactoryInterface;
+use AlanVdb\Router\Definition\RouterInterface;
+use AlanVdb\Router\Router;
 
-use AlanVdb\Router\Definition\RouteInterface;
-use AlanVdb\Router\Definition\RouteIteratorInterface;
-use AlanVdb\Router\Definition\RequestMatcherInterface;
-use AlanVdb\Router\Definition\UriGeneratorInterface;
-use Psr\Http\Server\MiddlewareInterface;
-
-use AlanVdb\Router\Route;
-use AlanVdb\Router\RouteIterator;
-use AlanVdb\Router\RequestMatcher;
-use AlanVdb\Router\UriGenerator;
-use AlanVdb\Router\Middleware\RouterMiddleware;
-
-class RouterFactory
-    implements
-        RouteFactoryInterface,
-        RouteIteratorFactoryInterface,
-        RequestMatcherFactoryInterface,
-        UriGeneratorFactoryInterface,
-        RouterMiddlewareFactoryInterface
+class RouterFactory implements RouterFactoryInterface
 {
-    /**
-     * Creates a route instance.
-     * 
-     * @param string $methods like "GET" or "GET|POST"
-     * @param string $path
-     * @param mixed $target
-     * @return RouteInterface
-     */
-    public function createRoute(string $name, string $methods, string $path, mixed $target): RouteInterface
+    public function createRouter(array $routes) : RouterInterface
     {
-        return new Route($name, $methods, $path, $target);
-    }
-
-    /**
-     * Creates a Iterator of routes.
-     *
-     * @return RouteIteratorInterface
-     */
-    public function createRouteIterator(RouteInterface ...$routes): RouteIteratorInterface
-    {
-        return new RouteIterator(...$routes);
-    }
-
-    /**
-     * 
-     */
-    public function createRequestMatcher(RouteIteratorInterface $routes): RequestMatcherInterface
-    {
-        return new RequestMatcher($routes);
-    }
-
-    /**
-     * 
-     */
-    public function createUriGenerator(RouteIteratorInterface $routes): UriGeneratorInterface
-    {
-        return new UriGenerator($routes);
-    }
-
-    public function createRouterMiddleware(array $routeParams) : MiddlewareInterface
-    {
-        return new RouterMiddleware($routeParams, $this);
+        return new Router($routes);
     }
 }

@@ -5,9 +5,8 @@ namespace AlanVdb\Router;
 use AlanVdb\Router\Definition\RouteIteratorInterface;
 use AlanVdb\Router\Definition\RouteInterface;
 
-use Psr\Container\NotFoundExceptionInterface;
-use AlanVdb\Router\Exception\InvalidRouteCollectionParamProvided;
 use AlanVdb\Router\Exception\RouteNameNotFound;
+use AlanVdb\Router\Exception\InvalidRouteIteratorParamProvided;
 use Throwable;
 
 class RouteIterator implements RouteIteratorInterface
@@ -18,10 +17,15 @@ class RouteIterator implements RouteIteratorInterface
 
     public function __construct(RouteInterface ...$routes)
     {
+        if (empty($routes)) {
+            throw new InvalidRouteIteratorParamProvided("No routes provided to the RouteIterator constructor.");
+        }
         foreach ($routes as $route) {
             $routeName = $route->getName();
             $this->routes[$routeName] = $route;
-            $this->offsets[] = $routeName;
+            if (!array_key_exists($routeName, $this->offsets)) {
+                $this->offsets[] = $routeName;
+            }
         }
     }
 
@@ -35,7 +39,7 @@ class RouteIterator implements RouteIteratorInterface
     public function get(string $name): RouteInterface
     {
         if (!array_key_exists($name, $this->routes)) {
-            throw new RouteNameNotFound("Route name '$name' not found in collection.", 0, $e);
+            throw new RouteNameNotFound("Route name '$name' not found in collection.");
         }
         return $this->routes[$name];
     }
@@ -71,4 +75,10 @@ class RouteIterator implements RouteIteratorInterface
     {
         return array_key_exists($this->currentOffset, $this->offsets);
     }
+
+    public function count(): int
+    {
+        return count($this->routes);
+    }
+
 }

@@ -3,87 +3,65 @@
 namespace AlanVdb\Tests\Router\Factory;
 
 use AlanVdb\Router\Factory\RouterFactory;
-use AlanVdb\Router\Route;
-use AlanVdb\Router\RouteCollection;
-use AlanVdb\Router\RequestMatcher;
-use AlanVdb\Router\UriGenerator;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
+use AlanVdb\Router\Definition\RouterInterface;
+use AlanVdb\Router\Router;
 use PHPUnit\Framework\TestCase;
-use AlanVdb\Router\Definition\RouteInterface;
-use AlanVdb\Router\Definition\RouteIteratorInterface;
-use AlanVdb\Router\Definition\RequestMatcherInterface;
-use AlanVdb\Router\Definition\UriGeneratorInterface;
-use AlanVdb\Dependency\Definition\LazyContainerInterface;
 
-#[CoversClass(RouterFactory::class)]
-final class RouterFactoryTest extends TestCase
+class RouterFactoryTest extends TestCase
 {
-    #[\PHPUnit\Test]
-    public function testCreateRoute(): void
-    {
-        $factory = new RouterFactory();
-        $route = $factory->createRoute('home', 'GET', '/home', fn() => 'Home');
+    private RouterFactory $factory;
 
-        $this->assertInstanceOf(RouteInterface::class, $route);
-        $this->assertInstanceOf(Route::class, $route);
-        $this->assertSame('home', $route->getName());
-        $this->assertSame(['GET'], $route->getMethods());
-        $this->assertSame('/home', $route->getPath());
+    protected function setUp(): void
+    {
+        $this->factory = new RouterFactory();
     }
 
-    #[\PHPUnit\Test]
-    public function testCreateRouteCollection(): void
+    public function testImplementsRouterFactoryInterface(): void
     {
-        $factory = new RouterFactory();
-        $routeCollection = $factory->createRouteCollection();
-
-        $this->assertInstanceOf(RouteIteratorInterface::class, $routeCollection);
-        $this->assertInstanceOf(LazyContainerInterface::class, $routeCollection);
-        $this->assertInstanceOf(RouteCollection::class, $routeCollection);
+        $this->assertInstanceOf(
+            'AlanVdb\Router\Definition\RouterFactoryInterface',
+            $this->factory
+        );
     }
 
-    #[\PHPUnit\Test]
-    public function testCreateRequestMatcher(): void
+    public function testCreateRouterReturnsRouterInstance(): void
     {
-        $factory = new RouterFactory();
-        $routeCollection = $factory->createRouteCollection();
-        $requestMatcher = $factory->createRequestMatcher($routeCollection);
-
-        $this->assertInstanceOf(RequestMatcherInterface::class, $requestMatcher);
-        $this->assertInstanceOf(RequestMatcher::class, $requestMatcher);
-    }
-
-    #[\PHPUnit\Test]
-    public function testCreateUriGenerator(): void
-    {
-        $factory = new RouterFactory();
-        $routeCollection = $factory->createRouteCollection();
-        $uriGenerator = $factory->createUriGenerator($routeCollection);
-
-        $this->assertInstanceOf(UriGeneratorInterface::class, $uriGenerator);
-        $this->assertInstanceOf(UriGenerator::class, $uriGenerator);
-    }
-
-    #[\PHPUnit\Test]
-    #[DataProvider('provideRouteData')]
-    public function testCreateMultipleRoutes(string $name, string $methods, string $path): void
-    {
-        $factory = new RouterFactory();
-        $route = $factory->createRoute($name, $methods, $path, fn() => 'Action');
-
-        $this->assertInstanceOf(RouteInterface::class, $route);
-        $this->assertSame($name, $route->getName());
-        $this->assertSame(explode('|', $methods), $route->getMethods());
-        $this->assertSame($path, $route->getPath());
-    }
-
-    public static function provideRouteData(): array
-    {
-        return [
-            ['home', 'GET', '/home'],
-            ['post_show', 'GET|POST', '/post/{id}'],
-            ['user_profile', 'GET', '/user/{id}/profile'],
+        $routes = [
+            ['home', 'GET', '/', fn() => null],
+            ['about', 'GET', '/about', fn() => null]
         ];
+
+        $router = $this->factory->createRouter($routes);
+
+        $this->assertInstanceOf(Router::class, $router);
+        $this->assertInstanceOf(RouterInterface::class, $router);
+    }
+
+    public function testCreatedRouterContainsProvidedRoutes(): void
+    {
+        $routes = [
+            ['test_route', 'GET', '/test', fn() => null]
+        ];
+
+        $router = $this->factory->createRouter($routes);
+
+        // Vérification indirecte via la génération d'URI
+        $this->assertSame('/test', $router->generateUri('test_route'));
+    }
+
+    public function testEmptyRoutesArePassedThrough(): void
+    {
+        $this->expectException('AlanVdb\Router\Exception\InvalidRouterParamProvided');
+        $this->expectExceptionMessage('No routes provided to the router.');
+
+        $this->factory->createRouter([]);
+    }
+
+    public function testInvalidRoutesStructureArePassedThrough(): void
+    {
+        $this->expectException('AlanVdb\Router\Exception\InvalidRouterParamProvided');
+        $this->expectExceptionMessage('Route parameters must be an array of 4 values.');
+
+        $this->factory->createRouter([['invalid']]);
     }
 }
