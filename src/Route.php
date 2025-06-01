@@ -37,7 +37,7 @@ class Route implements RouteInterface
     {
         foreach (['name', 'path', 'methods'] as $varName) {
             if (empty($$varName)) {
-                throw new InvalidRouteParamProvided("$varName argument cannot be empty.");
+                throw new InvalidRouteParamProvided("{$varName} argument cannot be empty.");
             }
         }
 
